@@ -1,0 +1,87 @@
+name: Database migrations
+
+on:
+  push:
+    branches: 
+    - develop
+    - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      flyway_action:
+      description: 'Define Flyway action'
+      required: true
+      default: 'info'
+      type: choice
+      options:
+      - info
+      - repair
+      - clean
+      - migrate
+env:
+  - DB_NAME: FLYWAY_DB
+  - WAREHOUSE_NAME: COMPUTE_WH
+  - ROLE: SYSADMIN
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  db-migrate:
+    name: Deploy DB
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check-out code from repository
+        uses: actions/checkout@v3
+
+      - name: Migrate database in Github Action using 9.10.1 Flyway Docker Container
+        using: docker
+        image: docker://flyway/flyway:9.10.1
+        env:
+          FLYWAY_URL: ${{ inputs.url }}
+          FLYWAY_USER: ${{ inputs.user }}
+          FLYWAY_PASSWORD: ${{ inputs.password }}
+          FLYWAY_LOCATIONS: ${{ inputs.locations }}
+          FLYWAY_CLEAN_DISABLED: ${{ inputs.disableclean }}
+          FLYWAY_BASELINE_ON_MIGRATE: ${{ inputs.baselineonmigrate }}
+          FLYWAY_BASELINE_VERSION: ${{ inputs.baselineversion }}
+        args:
+          - ${{ inputs.command }}
+        inputs:
+          url:
+            description: The jdbc url to use to connect to the database
+            required: true
+          user:
+            description: The user to use to connect to the database
+            required: false
+          password:
+            description: The password to use to connect to the database
+            required: false
+          locations:
+            description: Comma-separated list of locations to scan recursively for migrations
+            required: true
+            default: filesystem:./sql
+          command:
+            description: Which of the Flyway commands you would like Flyway to run
+            required: true
+            default: migrate
+          disableclean:
+            description: Would you like clean disabled (true or false)
+            required: false
+            default: false
+          baselineonmigrate:
+            description: Would you like to baseline on migrate (true or false)
+            required: false
+            default: false
+          baselineversion:
+            description: What is your baseline version
+            required: false
+            default: 0.0
+        with:
+          url: jdbc:snowflake://${{ secrets.account }}.snowflakecomputing.com/?db=${{ env.DB_NAME }}&warehouse=${{ env.WAREHOUSE_NAME }}&role=${{ env.ROLE }}
+          user: ${{ secrets.user_name }}
+          password: ${{ secrets.db_secret }}
+          db_name: ${{ env.DB_NAME }}
+          warehouse_name: ${{ env.WAREHOUSE_NAME }}
+          locations: filesystem:.db/migrations/
+          command: ${{ inputs.flyway_action }}
