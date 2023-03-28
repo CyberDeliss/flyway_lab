@@ -1,3 +1,4 @@
+use schema AGAFIA_TEMEROVA;
 create view V_EMPLOYEES(
     employee_name,
     job_name,
