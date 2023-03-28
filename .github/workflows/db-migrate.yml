@@ -4,6 +4,7 @@ on:
   push:
     branches: 
     - develop
+    - main
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -54,5 +55,3 @@ jobs:
           warehouse_name: ${{ env.WAREHOUSE_NAME }}
           locations: filesystem:.db/migrations/
           command: ${{ inputs.flyway_action }}
-#          disableclean: false
-#          baselineonmigrate: false
