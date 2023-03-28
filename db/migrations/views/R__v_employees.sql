@@ -3,13 +3,13 @@ create or replace view V_EMPLOYEES(
     employee_name,
     job_name,
     dep_name,
-    salary
+    SALARY_ANNUAL
 
     )AS select distinct
         e.employee_name,
         j.job_name,
         d.dep_name,
-        e.salary
+        e.SALARY_ANNUAL
 
         from AGAFIA_TEMEROVA.EMPLOYEES e
         join AGAFIA_TEMEROVA.DEPARTMENTS d
