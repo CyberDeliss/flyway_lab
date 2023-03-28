@@ -1,0 +1,47 @@
+name: Database migrations
+
+on:
+  push:
+    branches: 
+    - develop
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+    inputs:
+      flyway_action:
+      description: 'Define Flyway action'
+      required: true
+      default: 'info'
+      type: choice
+      options:
+      - info
+      - repair
+      - clean
+      - migrate
+env:
+  - DB_NAME: FLYWAY_DB
+  - WAREHOUSE_NAME: COMPUTE_WH
+  - ROLE: SYSADMIN
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  db-migrate:
+    name: Deploy DB
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check-out code from repository
+        uses: actions/checkout@v3
+
+      - name: Apply migrations
+        uses:
+        with:
+          url: jdbc:snowflake://${{ secrets.account }}.snowflakecomputing.com/?db=${{ secrets.db_name }}&warehouse=${{ secrets.warehouse_name }}&role=${{ secrets.role }}
+          user: ${{ secrets.user_name }}
+          password: ${{ secrets.db_secret }}
+          db_name: ${{ secrets.db_name }}
+          warehouse_name: ${{ secrets.warehouse_name }}
+          locations: filesystem:.db/migrations/
+          command: ${{ inputs.flyway_action }}
+          disableclean: false
+          baselineonmigrate: false
