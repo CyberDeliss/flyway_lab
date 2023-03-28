@@ -37,16 +37,6 @@ jobs:
       - name: Migrate database in Github Action using 9.10.1 Flyway Docker Container
         using: docker
         image: docker://flyway/flyway:9.10.1
-        env:
-          FLYWAY_URL: ${{ inputs.url }}
-          FLYWAY_USER: ${{ inputs.user }}
-          FLYWAY_PASSWORD: ${{ inputs.password }}
-          FLYWAY_LOCATIONS: ${{ inputs.locations }}
-          FLYWAY_CLEAN_DISABLED: ${{ inputs.disableclean }}
-          FLYWAY_BASELINE_ON_MIGRATE: ${{ inputs.baselineonmigrate }}
-          FLYWAY_BASELINE_VERSION: ${{ inputs.baselineversion }}
-        args:
-          - ${{ inputs.command }}
         inputs:
           url:
             description: The jdbc url to use to connect to the database
@@ -85,3 +75,13 @@ jobs:
           warehouse_name: ${{ env.WAREHOUSE_NAME }}
           locations: filesystem:.db/migrations/
           command: ${{ inputs.flyway_action }}
+        env:
+          FLYWAY_URL: ${{ inputs.url }}
+          FLYWAY_USER: ${{ inputs.user }}
+          FLYWAY_PASSWORD: ${{ inputs.password }}
+          FLYWAY_LOCATIONS: ${{ inputs.locations }}
+          FLYWAY_CLEAN_DISABLED: ${{ inputs.disableclean }}
+          FLYWAY_BASELINE_ON_MIGRATE: ${{ inputs.baselineonmigrate }}
+          FLYWAY_BASELINE_VERSION: ${{ inputs.baselineversion }}
+        args:
+          - ${{ inputs.command }}
