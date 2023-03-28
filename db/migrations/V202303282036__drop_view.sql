@@ -1,2 +1,2 @@
 use schema public;
-drop if exist view V_EMPLOYEES;
+drop view V_EMPLOYEES;
