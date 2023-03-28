@@ -1,8 +1,8 @@
 use schema AGAFIA_TEMEROVA;
 create view V_EMPLOYEES(
-    e.employee_name,
-    j.job_name,
-    d.dep_name
+    employee_name,
+    job_name,
+    dep_name
 
     )AS select distinct
         e.employee_name,
