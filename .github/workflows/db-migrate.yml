@@ -47,6 +47,36 @@ jobs:
           FLYWAY_BASELINE_VERSION: ${{ inputs.baselineversion }}
         args:
           - ${{ inputs.command }}
+        inputs:
+          url:
+            description: The jdbc url to use to connect to the database
+            required: true
+          user:
+            description: The user to use to connect to the database
+            required: false
+          password:
+            description: The password to use to connect to the database
+            required: false
+          locations:
+            description: Comma-separated list of locations to scan recursively for migrations
+            required: true
+            default: filesystem:./sql
+          command:
+            description: Which of the Flyway commands you would like Flyway to run
+            required: true
+            default: migrate
+          disableclean:
+            description: Would you like clean disabled (true or false)
+            required: false
+            default: false
+          baselineonmigrate:
+            description: Would you like to baseline on migrate (true or false)
+            required: false
+            default: false
+          baselineversion:
+            description: What is your baseline version
+            required: false
+            default: 0.0
         with:
           url: jdbc:snowflake://${{ secrets.account }}.snowflakecomputing.com/?db=${{ env.DB_NAME }}&warehouse=${{ env.WAREHOUSE_NAME }}&role=${{ env.ROLE }}
           user: ${{ secrets.user_name }}
