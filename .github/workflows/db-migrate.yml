@@ -36,11 +36,11 @@ jobs:
       - name: Apply migrations
         uses:
         with:
-          url: jdbc:snowflake://${{ secrets.account }}.snowflakecomputing.com/?db=${{ secrets.db_name }}&warehouse=${{ secrets.warehouse_name }}&role=${{ secrets.role }}
+          url: jdbc:snowflake://${{ secrets.account }}.snowflakecomputing.com/?db=${{ env.DB_NAME }}&warehouse=${{ env.WAREHOUSE_NAME }}&role=${{ env.ROLE }}
           user: ${{ secrets.user_name }}
           password: ${{ secrets.db_secret }}
-          db_name: ${{ secrets.db_name }}
-          warehouse_name: ${{ secrets.warehouse_name }}
+          db_name: ${{ env.DB_NAME }}
+          warehouse_name: ${{ env.WAREHOUSE_NAME }}
           locations: filesystem:.db/migrations/
           command: ${{ inputs.flyway_action }}
           disableclean: false
