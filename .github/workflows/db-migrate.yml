@@ -19,9 +19,9 @@ on:
         - clean
         - migrate
 env:
-  - DB_NAME: FLYWAY_DB
-  - WAREHOUSE_NAME: COMPUTE_WH
-  - ROLE: SYSADMIN
+  DB_NAME: FLYWAY_DB
+  WAREHOUSE_NAME: COMPUTE_WH
+  ROLE: SYSADMIN
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
