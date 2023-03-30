@@ -1,23 +1,23 @@
-name: Database migrations
 
+
+name: Database migrations
 on:
   push:
-    branches: 
+    branches:
     - main
-
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
       flyway_action:
-      description: 'Define Flyway action'
-      required: true
-      default: 'info'
-      type: choice
-      options:
-      - info
-      - repair
-      - clean
-      - migrate
+        description: 'Define Flyway action'
+        required: true
+        default: 'info'
+        type: choice
+        options:
+        - info
+        - repair
+        - clean
+        - migrate
 env:
   - DB_NAME: FLYWAY_DB
   - WAREHOUSE_NAME: COMPUTE_WH
@@ -28,7 +28,7 @@ jobs:
   db-migrate:
     name: Deploy DB
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Check-out code from repository
         uses: actions/checkout@v3
