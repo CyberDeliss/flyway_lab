@@ -1,0 +1,5 @@
+use schema AGAFIA_TEMEROVA;
+
+select * from AGAFIA_TEMEROVA.EMPLOYEES;
+select * from AGAFIA_TEMEROVA.DEPARTMENTS;
+select * from AGAFIA_TEMEROVA.JOBS;
